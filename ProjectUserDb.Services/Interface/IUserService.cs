@@ -2,16 +2,16 @@
 
 namespace ProjectUser.Services.Interface
 {
-    public interface IUserServices
+    public interface IUserService
     {
         Task<List<UserModel>> GetUserAsync();
 
         Task<UserModel> GetByIdAsync(int _id);
 
-        Task CreateUser(UserModel _userModel);
+        Task CreateAsync(UserModel _userModel);
 
-        Task UpdateUser(UserModel _userModl);
+        Task UpdateAsync(UserModel _userModl);
 
-        Task DeleteUser(int _id);
+        Task DeleteAsync(int _id);
     }
 }

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectUser.Repository.Models;
 using ProjectUser.Services.Interface;
+using ProjectUser.WebAPI.Filter;
+using ProjectUser.WebAPI.FluentValidation;
 
 namespace ProjectUser.WebAPI.Controllers
 {
@@ -14,9 +16,9 @@ namespace ProjectUser.WebAPI.Controllers
     };
 
         //private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IUserServices _userTableServices;
+        private readonly IUserService _userTableServices;
 
-        public WeatherForecastController(/*ILogger<WeatherForecastController> logger,*/ IUserServices userTableServices)
+        public WeatherForecastController(/*ILogger<WeatherForecastController> logger,*/ IUserService userTableServices)
         {
             //_logger = logger;
             _userTableServices = userTableServices;
@@ -45,23 +47,31 @@ namespace ProjectUser.WebAPI.Controllers
         {
             return await _userTableServices.GetByIdAsync(_id);
         }
-
+        
         [HttpPost("CreateUser")]
-        public async Task CreateUser([FromQuery] UserModel _userModl)
+        [RequestValidator(typeof(CreateUseParameterValidator))]
+        public async Task<IActionResult> CreateUser([FromBody] UserModel _userModl)
         {
-            await _userTableServices.CreateUser(_userModl);
+          
+             await _userTableServices.CreateAsync(_userModl);
+
+
+            return Ok();
+
+            //await _userTableServices.CreateUser(_userModl);
         }
 
         [HttpPut("UpdateUser")]
-        public async Task UpdateUser([FromQuery] UserModel _userModl)
+ 
+        public async Task UpdateUser([FromBody] UserModel _userModl)
         {
-            await _userTableServices.UpdateUser(_userModl);
+            await _userTableServices.UpdateAsync(_userModl);
         }
 
         [HttpDelete("DeleteUser")]
-        public async Task DeleteUser([FromQuery]int _id)
+        public async Task DeleteUser([FromBody] int _id)
         {
-            await _userTableServices.DeleteUser(_id);
+            await _userTableServices.DeleteAsync(_id);
         }
     }
 }

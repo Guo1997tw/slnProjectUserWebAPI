@@ -5,7 +5,7 @@ using System.ComponentModel.Design;
 
 namespace ProjectUser.Services.Services
 {
-    public class UserServices : IUserServices
+    public class UserServices : IUserService
     {
         private readonly IUserRepository _userTableRepository;
 
@@ -30,12 +30,12 @@ namespace ProjectUser.Services.Services
             else { throw new Exception("Name Not Found"); }
         }
 
-        public async Task CreateUser(UserModel _userModel)
+        public async Task CreateAsync(UserModel _userModel)
         {
             await _userTableRepository.CreateAsync(_userModel);
         }
 
-        public async Task UpdateUser(UserModel _userModl)
+        public async Task UpdateAsync(UserModel _userModl)
         {
             var getID = await _userTableRepository.GetAsync(_userModl.UserId);
 
@@ -51,7 +51,7 @@ namespace ProjectUser.Services.Services
             }
         }
 
-        public async Task DeleteUser(int _id)
+        public async Task DeleteAsync(int _id)
         {
             var getID = await _userTableRepository.GetAsync(_id);
 

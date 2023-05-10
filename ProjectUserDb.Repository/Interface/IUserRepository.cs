@@ -6,19 +6,14 @@ namespace ProjectUser.Repository.Interface
     {
         Task<List<UserModel>> GetListAsync();
 
-        Task<UserModel> GetAsync(int _id);
+        Task<UserModel> GetAsync(int id);
 
-        Task CreateAsync(UserModel _userModl);
+        Task CreateAsync(UserModel user);
 
-        Task UpdateAsync(UserModel _userModl);
+        Task UpdateAsync(UserModel user);
 
-        Task DeleteAsync(int _id);
+        Task DeleteAsync(int id);
     }
 
-    public enum Gender : int
-
-    {
-        M,
-        F
-    }
+   
 }

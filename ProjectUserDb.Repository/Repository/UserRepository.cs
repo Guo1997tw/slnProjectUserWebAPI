@@ -39,7 +39,7 @@ namespace ProjectUser.Repository.Repository
             return result;
         }
 
-        public async Task CreateAsync(UserModel _userModel)
+        public async Task CreateAsync(UserModel user)
         {
             var ucs = _userDbCommon.GetConnection();
 
@@ -49,15 +49,15 @@ namespace ProjectUser.Repository.Repository
 
             //DynamicParameters
             var parameters = new DynamicParameters();
-            parameters.Add("UserName", _userModel.UserName, DbType.String);
-            parameters.Add("UserSex", _userModel.UserSex, DbType.String);
-            parameters.Add("UserBirthDay", _userModel.UserBirthDay, DbType.DateTime);
-            parameters.Add("UserMobilePhone", _userModel.UserMobilePhone, DbType.String);
+            parameters.Add("UserName", user.UserName, DbType.String);
+            parameters.Add("UserSex", user.UserSex, DbType.String);
+            parameters.Add("UserBirthDay", user.UserBirthDay, DbType.DateTime);
+            parameters.Add("UserMobilePhone", user.UserMobilePhone, DbType.String);
 
             await ucs.ExecuteAsync(insertSQL, parameters);
         }
 
-        public async Task UpdateAsync(UserModel _userModl)
+        public async Task UpdateAsync(UserModel user)
         {
             var ucs = _userDbCommon.GetConnection();
 
@@ -71,11 +71,11 @@ namespace ProjectUser.Repository.Repository
 
             //DynamicParameters
             var parameters = new DynamicParameters();
-            parameters.Add("UserId", _userModl.UserId, DbType.Int64);
-            parameters.Add("UserName", _userModl.UserName, DbType.String);
-            parameters.Add("UserSex", _userModl.UserSex, DbType.String);
-            parameters.Add("UserBirthDay", _userModl.UserBirthDay, DbType.DateTime);
-            parameters.Add("UserMobilePhone", _userModl.UserMobilePhone, DbType.String);
+            parameters.Add("UserId", user.UserId, DbType.Int64);
+            parameters.Add("UserName", user.UserName, DbType.String);
+            parameters.Add("UserSex", user.UserSex, DbType.String);
+            parameters.Add("UserBirthDay", user.UserBirthDay, DbType.DateTime);
+            parameters.Add("UserMobilePhone", user.UserMobilePhone, DbType.String);
 
             await ucs.ExecuteAsync(updateSQL, parameters);
         }
@@ -85,10 +85,10 @@ namespace ProjectUser.Repository.Repository
             var ucs = _userDbCommon.GetConnection();
 
             //SQL comment
-            var deleteSQL = @"DELETE FROM [dbo].[UserTable]
-                              WHERE UserId = @UserId";
+            const string sqlCommand = @"DELETE FROM [dbo].[UserTable]
+                                        WHERE UserId = @UserId";
 
-            await ucs.ExecuteAsync(deleteSQL, new { UserId = _id });
+            await ucs.ExecuteAsync(sqlCommand, new { UserId = _id });
         }
     }
 }

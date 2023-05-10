@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Add DI
 builder.Services.AddScoped<IUserDbCommon, UserDbCommon>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IUserService, UserServices>();
 
 // Add services to the container.
 builder.Services.AddControllers();

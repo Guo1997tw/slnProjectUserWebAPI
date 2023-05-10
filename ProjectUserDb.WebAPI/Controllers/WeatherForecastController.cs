@@ -34,22 +34,34 @@ namespace ProjectUser.WebAPI.Controllers
             .ToArray();
         }*/
 
-        [HttpGet("GetUser")]
-        public async Task<List<UserDTO>> GetUser()
+        [HttpGet("GetList")]
+        public async Task<List<UserModel>> GetList()
         {
-            return await _userTableServices.GetUser();
+            return await _userTableServices.GetUserAsync();
         }
 
-        [HttpGet("GetName")]
-        public async Task<UserDTO> GetName(string name)
+        [HttpGet("GetId")]
+        public async Task<UserModel> GetId(int _id)
         {
-            return await _userTableServices.GetName(name);
+            return await _userTableServices.GetByIdAsync(_id);
         }
 
         [HttpPost("CreateUser")]
-        public async Task CreateUser(string name, string sex, DateTime birthday, string mobilephone)
+        public async Task CreateUser([FromQuery] UserModel _userModl)
         {
-            await _userTableServices.CreateUser(name, sex, birthday, mobilephone);
+            await _userTableServices.CreateUser(_userModl);
+        }
+
+        [HttpPut("UpdateUser")]
+        public async Task UpdateUser([FromQuery] UserModel _userModl)
+        {
+            await _userTableServices.UpdateUser(_userModl);
+        }
+
+        [HttpDelete("DeleteUser")]
+        public async Task DeleteUser([FromQuery]int _id)
+        {
+            await _userTableServices.DeleteUser(_id);
         }
     }
 }

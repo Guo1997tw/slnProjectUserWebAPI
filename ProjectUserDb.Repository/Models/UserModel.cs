@@ -1,6 +1,6 @@
 ﻿namespace ProjectUser.Repository.Models
 {
-    public class UserDTO
+    public class UserModel
     {
         public int UserId { get; set; }
         public string? UserName { get; set; }

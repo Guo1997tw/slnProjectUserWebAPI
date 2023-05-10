@@ -15,44 +15,80 @@ namespace ProjectUser.Repository.Repository
             _userDbCommon = userDbCommon;
         }
 
-        public async Task<List<UserDTO>> GetAllUserAsync()
-        {
-            using (var ucs = _userDbCommon.GetConnection())
-            {
-                var selectSQL = @"SELECT * FROM UserTable";
-                
-                var result = await ucs.QueryAsync<UserDTO>(selectSQL);
-
-                return result.ToList();
-            }
-        }
-
-        public async Task<UserDTO> GetDetailUserAsync(string name)
-        {
-            using (var ucs =  _userDbCommon.GetConnection())
-            {
-                var searchSQL = @"SELECT * FROM UserTable WHERE UserName = @userName";
-
-                var result = await ucs.QueryFirstOrDefaultAsync<UserDTO>(searchSQL, new { userName = name, DbType.String});
-
-                return result;
-            }
-        }
-
-        public async Task CreateUserAsync(string userName, string userSex, DateTime userBirthDay, string userMobilePhone)
+        public async Task<List<UserModel>> GetListAsync()
         {
             var ucs = _userDbCommon.GetConnection();
 
-            var insertSQL = @"INSERT INTO UserTable (UserName, UserSex, UserBirthDay, UserMobilePhone)
-                            VALUES (@userName, @userSex, @userBirthDay, @userMobilePhone)";
+            //SQL comment
+            var selectSQL = @"SELECT * FROM UserTable";
+                
+            var result = await ucs.QueryAsync<UserModel>(selectSQL);
 
-            /*var parameters = new DynamicParameters();
-            parameters.Add("userName", userDTO.UserName, DbType.String);
-            parameters.Add("userSex", userDTO.UserSex, DbType.String);
-            parameters.Add("userBirthDay", userDTO.UserBirthDay, DbType.DateTime);
-            parameters.Add("userMobilePhone", userDTO.UserMobilePhone, DbType.String);*/
+            return result.ToList();
+        }
 
-            await ucs.ExecuteAsync(insertSQL, new { UserName = userName, UserSex = userSex, UserBirthDay = userBirthDay, UserMobilePhone = userMobilePhone });
+        public async Task<UserModel> GetAsync(int _id)
+        {
+            var ucs = _userDbCommon.GetConnection();
+
+            //SQL comment
+            var searchSQL = @"SELECT * FROM UserTable WHERE UserId = @UserId";
+            
+            var result = await ucs.QueryFirstOrDefaultAsync<UserModel>(searchSQL, new { UserId = _id, DbType.Int64});
+
+            return result;
+        }
+
+        public async Task CreateAsync(UserModel _userModel)
+        {
+            var ucs = _userDbCommon.GetConnection();
+
+            //SQL comment
+            var insertSQL = @"INSERT INTO [dbo].[UserTable] (UserName, UserSex, UserBirthDay, UserMobilePhone)
+                              VALUES (@UserName, @UserSex, @UserBirthDay, @UserMobilePhone)";
+
+            //DynamicParameters
+            var parameters = new DynamicParameters();
+            parameters.Add("UserName", _userModel.UserName, DbType.String);
+            parameters.Add("UserSex", _userModel.UserSex, DbType.String);
+            parameters.Add("UserBirthDay", _userModel.UserBirthDay, DbType.DateTime);
+            parameters.Add("UserMobilePhone", _userModel.UserMobilePhone, DbType.String);
+
+            await ucs.ExecuteAsync(insertSQL, parameters);
+        }
+
+        public async Task UpdateAsync(UserModel _userModl)
+        {
+            var ucs = _userDbCommon.GetConnection();
+
+            //SQL comment
+            var updateSQL = @"UPDATE [dbo].[UserTable]
+                            SET [UserName] = @UserName,
+                                [UserSex] = @UserSex,
+                                [UserBirthDay] = @UserBirthDay,
+                                [UserMobilePhone] = @UserMobilePhone
+                            WHERE [UserId] = @UserId";
+
+            //DynamicParameters
+            var parameters = new DynamicParameters();
+            parameters.Add("UserId", _userModl.UserId, DbType.Int64);
+            parameters.Add("UserName", _userModl.UserName, DbType.String);
+            parameters.Add("UserSex", _userModl.UserSex, DbType.String);
+            parameters.Add("UserBirthDay", _userModl.UserBirthDay, DbType.DateTime);
+            parameters.Add("UserMobilePhone", _userModl.UserMobilePhone, DbType.String);
+
+            await ucs.ExecuteAsync(updateSQL, parameters);
+        }
+
+        public async Task DeleteAsync(int _id)
+        {
+            var ucs = _userDbCommon.GetConnection();
+
+            //SQL comment
+            var deleteSQL = @"DELETE FROM [dbo].[UserTable]
+                              WHERE UserId = @UserId";
+
+            await ucs.ExecuteAsync(deleteSQL, new { UserId = _id });
         }
     }
 }

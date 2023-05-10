@@ -1,14 +1,24 @@
-﻿using Dapper;
-using ProjectUser.Repository.Models;
+﻿using ProjectUser.Repository.Models;
 
 namespace ProjectUser.Repository.Interface
 {
     public interface IUserRepository
     {
-        Task<List<UserDTO>> GetAllUserAsync();
+        Task<List<UserModel>> GetListAsync();
 
-        Task<UserDTO> GetDetailUserAsync(string name);
+        Task<UserModel> GetAsync(int _id);
 
-        Task CreateUserAsync(string userName, string userSex, DateTime userBirthDay, string userMobilePhone);
+        Task CreateAsync(UserModel _userModl);
+
+        Task UpdateAsync(UserModel _userModl);
+
+        Task DeleteAsync(int _id);
+    }
+
+    public enum Gender : int
+
+    {
+        M,
+        F
     }
 }

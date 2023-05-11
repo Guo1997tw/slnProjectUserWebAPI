@@ -1,23 +1,22 @@
 ﻿using Dapper;
-using ProjectUser.Common.Interface;
+using System.Data;
+using ProjectUser.Repository.Helpers;
 using ProjectUser.Repository.Models;
 using ProjectUser.Repository.Interface;
-using System.Data;
 
 namespace ProjectUser.Repository.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IUserDbCommon _userDbCommon;
-
-        public UserRepository(IUserDbCommon userDbCommon)
+        private readonly IDatabaseHelper _databaseHelper;
+        public UserRepository(IDatabaseHelper databaseHelper)
         {
-            _userDbCommon = userDbCommon;
+            _databaseHelper = databaseHelper;
         }
 
         public async Task<List<UserModel>> GetListAsync()
         {
-            var ucs = _userDbCommon.GetConnection();
+            var ucs = _databaseHelper.GetConnection();
 
             //SQL comment
             var selectSQL = @"SELECT * FROM UserTable";
@@ -27,21 +26,21 @@ namespace ProjectUser.Repository.Repository
             return result.ToList();
         }
 
-        public async Task<UserModel> GetAsync(int _id)
+        public async Task<UserModel> GetAsync(int id)
         {
-            var ucs = _userDbCommon.GetConnection();
+            var ucs = _databaseHelper.GetConnection();
 
             //SQL comment
             var searchSQL = @"SELECT * FROM UserTable WHERE UserId = @UserId";
             
-            var result = await ucs.QueryFirstOrDefaultAsync<UserModel>(searchSQL, new { UserId = _id, DbType.Int64});
+            var result = await ucs.QueryFirstOrDefaultAsync<UserModel>(searchSQL, new { UserId = id, DbType.Int64});
 
             return result;
         }
 
         public async Task CreateAsync(UserModel user)
         {
-            var ucs = _userDbCommon.GetConnection();
+            var ucs = _databaseHelper.GetConnection();
 
             //SQL comment
             var insertSQL = @"INSERT INTO [dbo].[UserTable] (UserName, UserSex, UserBirthDay, UserMobilePhone)
@@ -59,7 +58,7 @@ namespace ProjectUser.Repository.Repository
 
         public async Task UpdateAsync(UserModel user)
         {
-            var ucs = _userDbCommon.GetConnection();
+            var ucs = _databaseHelper.GetConnection();
 
             //SQL comment
             var updateSQL = @"UPDATE [dbo].[UserTable]
@@ -80,15 +79,15 @@ namespace ProjectUser.Repository.Repository
             await ucs.ExecuteAsync(updateSQL, parameters);
         }
 
-        public async Task DeleteAsync(int _id)
+        public async Task DeleteAsync(int id)
         {
-            var ucs = _userDbCommon.GetConnection();
+            var ucs = _databaseHelper.GetConnection();
 
             //SQL comment
             const string sqlCommand = @"DELETE FROM [dbo].[UserTable]
                                         WHERE UserId = @UserId";
 
-            await ucs.ExecuteAsync(sqlCommand, new { UserId = _id });
+            await ucs.ExecuteAsync(sqlCommand, new { UserId = id });
         }
     }
 }

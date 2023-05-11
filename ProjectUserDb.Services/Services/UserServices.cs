@@ -1,7 +1,6 @@
 ﻿using ProjectUser.Repository.Models;
 using ProjectUser.Repository.Interface;
 using ProjectUser.Services.Interface;
-using System.ComponentModel.Design;
 
 namespace ProjectUser.Services.Services
 {

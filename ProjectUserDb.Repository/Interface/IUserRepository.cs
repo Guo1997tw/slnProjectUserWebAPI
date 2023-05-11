@@ -14,6 +14,4 @@ namespace ProjectUser.Repository.Interface
 
         Task DeleteAsync(int id);
     }
-
-   
 }

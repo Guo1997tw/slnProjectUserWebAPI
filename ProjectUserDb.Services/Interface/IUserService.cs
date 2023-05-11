@@ -6,12 +6,12 @@ namespace ProjectUser.Services.Interface
     {
         Task<List<UserModel>> GetUserAsync();
 
-        Task<UserModel> GetByIdAsync(int _id);
+        Task<UserModel> GetByIdAsync(int id);
 
-        Task CreateAsync(UserModel _userModel);
+        Task CreateAsync(UserModel user);
 
-        Task UpdateAsync(UserModel _userModl);
+        Task UpdateAsync(UserModel user);
 
-        Task DeleteAsync(int _id);
+        Task DeleteAsync(int id);
     }
 }

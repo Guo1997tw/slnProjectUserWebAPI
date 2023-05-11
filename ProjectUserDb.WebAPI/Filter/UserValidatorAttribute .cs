@@ -4,20 +4,14 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ProjectUser.WebAPI.Filter
 {
-    public class RequestValidatorAttribute : ActionFilterAttribute
+    public class UserValidatorAttribute : ActionFilterAttribute
     {
         private readonly Type _validatorType;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomValidatorAttribute"/> class.
-        /// </summary>
-        /// <param name="validatorType">Type of the validator.</param>
-        public RequestValidatorAttribute(Type validatorType)
+        public UserValidatorAttribute(Type validatorType)
         {
             this._validatorType = validatorType;
         }
-
-        public object EvertrustAsyncContext { get; private set; }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -30,7 +24,7 @@ namespace ProjectUser.WebAPI.Filter
             var parameter = parameters.FirstOrDefault();
             if (parameter.Value == null)
             {
-                context.Result = new BadRequestObjectResult("未輸入 Parameter");
+                context.Result = new BadRequestObjectResult("Error");
             }
 
             var validator = Activator.CreateInstance(this._validatorType) as IValidator;
@@ -39,7 +33,7 @@ namespace ProjectUser.WebAPI.Filter
 
             if (validationResult.IsValid.Equals(false))
             {
-                var error = validationResult.Errors.FirstOrDefault();
+                var error = validationResult.Errors.First();
 
                 var failureOutputModel = new FailureResultOutputModel
                 {

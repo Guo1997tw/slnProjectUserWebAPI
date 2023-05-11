@@ -1,5 +1,4 @@
 ﻿using ProjectUser.Common.Enums;
-using ProjectUser.Repository.Interface;
 
 namespace ProjectUser.Repository.Models
 {

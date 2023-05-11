@@ -17,7 +17,7 @@ namespace ProjectUser.WebAPI.FluentValidation
 
             RuleFor(user => user.UserSex)
                 .IsInEnum()
-           .    WithMessage("");
+                .WithMessage("性別為M、F！");
 
             RuleFor(user => user.UserMobilePhone)
               

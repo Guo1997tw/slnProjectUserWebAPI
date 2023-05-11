@@ -1,16 +1,18 @@
-﻿using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Profiling.Data;
 
 namespace ProjectUser.Repository.Helpers
 {
     public class DatabaseHelper : IDatabaseHelper
     {
-        private readonly string _connectionString;
+        private readonly string? _connectionString;
+
+        public DatabaseHelper(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("UserDbContext");
+        }
 
         public DatabaseHelper(string connectionString)
         {

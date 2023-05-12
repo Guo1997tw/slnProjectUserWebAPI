@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Evertrust.ResponseWrapper.Models;
+using Microsoft.AspNetCore.Mvc;
 using ProjectUser.Repository.Models;
 using ProjectUser.Services.Interface;
 using ProjectUser.WebAPI.Filter;
@@ -42,6 +43,11 @@ namespace ProjectUser.WebAPI.Controllers
                 UserMobilePhone = createUserParameter.UserMobilePhone
             };
             await _userService.CreateAsync(userModel);
+
+            if(userModel.UserName.Contains(' ').Equals(true))
+            {
+                throw new Exception ("Name Error");
+            }
 
             return Ok(new ResultOutputModel
             {

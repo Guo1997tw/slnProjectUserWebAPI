@@ -5,6 +5,8 @@ using ProjectUser.Repository.Repository;
 using ProjectUser.Services.Interface;
 using ProjectUser.Services.Services;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 

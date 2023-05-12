@@ -13,7 +13,7 @@ namespace ProjectUser.Services.Services
             _userTableRepository = userTableRepository;
         }
 
-        public async Task<List<UserModel>> GetUserAsync()
+        public async Task<List<UserDTO>> GetUserAsync()
         {
             var result = await _userTableRepository.GetListAsync();
 

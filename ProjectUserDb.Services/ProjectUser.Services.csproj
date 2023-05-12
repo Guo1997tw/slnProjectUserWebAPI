@@ -11,4 +11,8 @@
     <ProjectReference Include="..\ProjectUserDb.Repository\ProjectUser.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappings\" />
+  </ItemGroup>
+
 </Project>

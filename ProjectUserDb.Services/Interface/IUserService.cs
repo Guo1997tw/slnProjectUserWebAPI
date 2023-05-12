@@ -4,7 +4,7 @@ namespace ProjectUser.Services.Interface
 {
     public interface IUserService
     {
-        Task<List<UserModel>> GetUserAsync();
+        Task<List<UserDTO>> GetUserAsync();
 
         Task<UserModel> GetByIdAsync(int id);
 

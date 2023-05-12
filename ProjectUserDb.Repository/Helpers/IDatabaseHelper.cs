@@ -1,6 +1,5 @@
 ﻿using System.Data;
 
-
 namespace ProjectUser.Repository.Helpers
 {
     /// <summary>

@@ -8,7 +8,7 @@ using ProjectUser.WebAPI.Models;
 namespace ProjectUser.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -30,25 +30,46 @@ namespace ProjectUser.WebAPI.Controllers
             return await _userService.GetByIdAsync(id);
         }
 
-        [HttpPost()]
+        [HttpPost]
         [UserValidatorAttribute(typeof(CreateUseParameterValidator))]
-        public async Task<IActionResult> CreateUser([FromBody] UserModel userModl)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserParameter createUserParameter)
         {
-            await _userService.CreateAsync(userModl);
-
+            UserModel userModel = new UserModel()
+            {
+                UserName = createUserParameter.UserName,
+                UserSex = createUserParameter.UserSex,
+                UserBirthDay = createUserParameter.UserBirthDay,
+                UserMobilePhone = createUserParameter.UserMobilePhone
+            };
+            await _userService.CreateAsync(userModel);
 
             return Ok(new ResultOutputModel
             {
                 Success = true,
                 Message = string.Empty
             });
-            
         }
 
-        [HttpPut()]
-        public async Task UpdateUser([FromBody] UserModel userModl)
+        [HttpPatch()]
+        [UserValidatorAttribute(typeof(UpdateUseParameterValidator))]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserParameter updateUserParameter)
         {
-            await _userService.UpdateAsync(userModl);
+            UserModel userModel = new UserModel()
+            {
+                UserId = updateUserParameter.UserId,
+                UserName = updateUserParameter.UserName,
+                UserSex = updateUserParameter.UserSex,
+                UserBirthDay = updateUserParameter.UserBirthDay,
+                UserMobilePhone = updateUserParameter.UserMobilePhone
+            };
+
+            await _userService.UpdateAsync(userModel);
+
+            return Ok(new ResultOutputModel
+            {
+                Success = true,
+                Message = string.Empty
+            });
         }
 
         [HttpDelete()]

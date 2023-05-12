@@ -4,13 +4,13 @@ using ProjectUser.Repository.Interface;
 using ProjectUser.Repository.Repository;
 using ProjectUser.Services.Interface;
 using ProjectUser.Services.Services;
-using System.Reflection;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Add DI
 builder.Services.AddScoped<IDatabaseHelper, DatabaseHelper>();
+//builder.Services.AddScoped<IDatabaseHelper>(Option => new DatabaseHelper("UserDbContext"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserServices>();
 
@@ -31,7 +31,7 @@ builder.Services.AddSwaggerGen(options =>
         {
             Title = " User Open API",
             Version = new Version(1, 0).ToString(),
-            Description = "This is Product API Swagger Document."
+            Description = "This is User API Swagger Document."
         }
     );
 
@@ -51,6 +51,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//CoreProfiler
 app.UseCoreProfiler(true);
 
 app.UseHttpsRedirection();

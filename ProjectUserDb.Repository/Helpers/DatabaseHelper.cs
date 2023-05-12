@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using StackExchange.Profiling.Data;
 
 namespace ProjectUser.Repository.Helpers
 {

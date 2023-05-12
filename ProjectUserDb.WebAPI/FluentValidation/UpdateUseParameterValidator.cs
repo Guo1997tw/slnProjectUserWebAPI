@@ -3,9 +3,9 @@ using ProjectUser.WebAPI.Models;
 
 namespace ProjectUser.WebAPI.FluentValidation
 {
-    public class CreateUseParameterValidator : AbstractValidator<CreateUserParameter>
+    public class UpdateUseParameterValidator : AbstractValidator<UpdateUserParameter>
     {
-        public CreateUseParameterValidator()
+        public UpdateUseParameterValidator()
         {
             RuleFor(user => user.UserName)
                 .NotEmpty().WithMessage("姓名不可為空！")

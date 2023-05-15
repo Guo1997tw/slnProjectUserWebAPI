@@ -1,17 +1,17 @@
-﻿using ProjectUser.Repository.Models;
+﻿using ProjectUser.Services.Dto;
 
 namespace ProjectUser.Services.Interface
 {
     public interface IUserService
     {
-        Task<List<UserModel>> GetUserAsync();
+        Task<List<UserServiceDto>> GetUsersAsync();
 
-        Task<UserModel> GetByIdAsync(int id);
+        Task<UserServiceDto> GetByIdAsync(int id);
 
-        Task CreateAsync(UserModel user);
+        Task CreateAsync(UserServiceDto userServiceDto);
 
-        Task UpdateAsync(UserModel user);
+        Task UpdateAsync(UserServiceDto userServiceDto);
 
-        Task DeleteAsync(int id);
+        Task<UserServiceDto?> DeleteAsync(int id);
     }
 }

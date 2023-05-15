@@ -18,20 +18,20 @@ namespace ProjectUser.Repository.Repository
         {
             var ucs = _databaseHelper.GetConnection();
 
-            //SQL comment
-            var selectSQL = @"SELECT * FROM UserTable";
+            var selectSQL = @"SELECT UserId, UserName, UserSex, UserBirthDay, UserMobilePhone FROM [dbo].[UserTable]";
                 
             var result = await ucs.QueryAsync<UserModel>(selectSQL);
 
             return result.ToList();
         }
 
-        public async Task<UserModel> GetAsync(int id)
+        public async Task<UserModel> GetByIdAsync(int id)
         {
             var ucs = _databaseHelper.GetConnection();
 
-            //SQL comment
-            var searchSQL = @"SELECT * FROM UserTable WHERE UserId = @UserId";
+            var searchSQL = @"SELECT UserId, UserName, UserSex, UserBirthDay, UserMobilePhone
+                              FROM [dbo].[UserTable]
+                              WHERE UserId = @UserId";
             
             var result = await ucs.QueryFirstOrDefaultAsync<UserModel>(searchSQL, new { UserId = id, DbType.Int64});
 
@@ -42,11 +42,9 @@ namespace ProjectUser.Repository.Repository
         {
             var ucs = _databaseHelper.GetConnection();
 
-            //SQL comment
             var insertSQL = @"INSERT INTO [dbo].[UserTable] (UserName, UserSex, UserBirthDay, UserMobilePhone)
                               VALUES (@UserName, @UserSex, @UserBirthDay, @UserMobilePhone)";
 
-            //DynamicParameters
             var parameters = new DynamicParameters();
             parameters.Add("UserName", user.UserName, DbType.String);
             parameters.Add("UserSex", user.UserSex, DbType.String);
@@ -60,7 +58,6 @@ namespace ProjectUser.Repository.Repository
         {
             var ucs = _databaseHelper.GetConnection();
 
-            //SQL comment
             var updateSQL = @"UPDATE [dbo].[UserTable]
                             SET [UserName] = @UserName,
                                 [UserSex] = @UserSex,
@@ -68,7 +65,6 @@ namespace ProjectUser.Repository.Repository
                                 [UserMobilePhone] = @UserMobilePhone
                             WHERE [UserId] = @UserId";
 
-            //DynamicParameters
             var parameters = new DynamicParameters();
             parameters.Add("UserId", user.UserId, DbType.Int64);
             parameters.Add("UserName", user.UserName, DbType.String);
@@ -83,9 +79,7 @@ namespace ProjectUser.Repository.Repository
         {
             var ucs = _databaseHelper.GetConnection();
 
-            //SQL comment
-            const string sqlCommand = @"DELETE FROM [dbo].[UserTable]
-                                        WHERE UserId = @UserId";
+            const string sqlCommand = @"DELETE FROM [dbo].[UserTable] WHERE UserId = @UserId";
 
             await ucs.ExecuteAsync(sqlCommand, new { UserId = id });
         }

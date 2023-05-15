@@ -6,7 +6,7 @@ namespace ProjectUser.Repository.Interface
     {
         Task<List<UserModel>> GetListAsync();
 
-        Task<UserModel> GetAsync(int id);
+        Task<UserModel> GetByIdAsync(int id);
 
         Task CreateAsync(UserModel user);
 

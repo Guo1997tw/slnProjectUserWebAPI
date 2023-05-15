@@ -1,10 +1,9 @@
-﻿using Evertrust.ResponseWrapper.Models;
-using Microsoft.AspNetCore.Mvc;
-using ProjectUser.Repository.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjectUser.Services.Interface;
 using ProjectUser.WebAPI.Filter;
 using ProjectUser.WebAPI.FluentValidation;
 using ProjectUser.WebAPI.Models;
+using ProjectUser.Services.Dto;
 
 namespace ProjectUser.WebAPI.Controllers
 {
@@ -20,47 +19,51 @@ namespace ProjectUser.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<UserModel>> GetList()
+        public async Task<IActionResult> GetList()
         {
-            return await _userService.GetUserAsync();
+            var result = await _userService.GetUsersAsync();
+
+            return Ok(result);
         }
 
         [HttpGet]
-        public async Task<UserModel> GetId(int id)
+        public async Task<IActionResult> GetId(int id)
         {
-            return await _userService.GetByIdAsync(id);
+            var result = await _userService.GetByIdAsync(id);
+
+            return Ok(result);
         }
 
         [HttpPost]
-        [UserValidatorAttribute(typeof(CreateUseParameterValidator))]
+        [UserValidator(typeof(CreateUseParameterValidator))]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserParameter createUserParameter)
         {
-            UserModel userModel = new UserModel()
+            UserServiceDto userServiceDto = new UserServiceDto()
             {
                 UserName = createUserParameter.UserName,
                 UserSex = createUserParameter.UserSex,
                 UserBirthDay = createUserParameter.UserBirthDay,
                 UserMobilePhone = createUserParameter.UserMobilePhone
             };
-            await _userService.CreateAsync(userModel);
-
-            if(userModel.UserName.Contains(' ').Equals(true))
-            {
-                throw new Exception ("Name Error");
-            }
+            await _userService.CreateAsync(userServiceDto);
 
             return Ok(new ResultOutputModel
             {
                 Success = true,
                 Message = string.Empty
             });
+
+            /*if(userServiceDto.UserName.Contains(' ').Equals(true))
+            {
+                throw new Exception ("Name Error");
+            }*/
         }
 
         [HttpPatch()]
         [UserValidatorAttribute(typeof(UpdateUseParameterValidator))]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserParameter updateUserParameter)
         {
-            UserModel userModel = new UserModel()
+            UserServiceDto userServiceDto = new UserServiceDto()
             {
                 UserId = updateUserParameter.UserId,
                 UserName = updateUserParameter.UserName,
@@ -69,7 +72,7 @@ namespace ProjectUser.WebAPI.Controllers
                 UserMobilePhone = updateUserParameter.UserMobilePhone
             };
 
-            await _userService.UpdateAsync(userModel);
+            await _userService.UpdateAsync(userServiceDto);
 
             return Ok(new ResultOutputModel
             {
@@ -79,9 +82,15 @@ namespace ProjectUser.WebAPI.Controllers
         }
 
         [HttpDelete()]
-        public async Task DeleteUser([FromBody] int id)
+        public async Task<IActionResult> DeleteUser([FromBody] int id)
         {
             await _userService.DeleteAsync(id);
+
+                        return Ok(new ResultOutputModel
+            {
+                Success = true,
+                Message = string.Empty
+            });
         }
     }
 }

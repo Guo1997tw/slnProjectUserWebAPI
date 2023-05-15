@@ -1,8 +1,8 @@
 ﻿using ProjectUser.Common.Enums;
 
-namespace ProjectUser.Repository.Models
+namespace ProjectUser.Services.Dto
 {
-    public class UserDTO
+    public class UserServiceDto
     {
         public int UserId { get; set; }
         public string? UserName { get; set; }

@@ -1,6 +1,8 @@
-﻿using ProjectUser.Repository.Models;
-using ProjectUser.Repository.Interface;
+﻿using ProjectUser.Services.Dto;
 using ProjectUser.Services.Interface;
+using ProjectUser.Repository.Interface;
+using AutoMapper;
+using ProjectUser.Repository.Models;
 
 namespace ProjectUser.Services.Services
 {
@@ -13,49 +15,93 @@ namespace ProjectUser.Services.Services
             _userTableRepository = userTableRepository;
         }
 
-        public async Task<List<UserModel>> GetUserAsync()
+        public async Task<List<UserServiceDto>> GetUsersAsync()
         {
-            var result = await _userTableRepository.GetListAsync();
+            var userModel = await _userTableRepository.GetListAsync();
 
-            if(result != null) { return result; }
-            else { throw new Exception("Data Not Found"); }
+            if (userModel.Any().Equals(false))
+            {
+                return new List<UserServiceDto>();
+            }
+
+            var usersList = userModel.Select(u => new UserServiceDto
+            {
+                UserId = u.UserId,
+                UserName = u.UserName,
+                UserSex = u.UserSex,
+                UserBirthDay = u.UserBirthDay,
+                UserMobilePhone = u.UserMobilePhone,
+            }).ToList();
+
+            return usersList;
         }
 
-        public async Task<UserModel> GetByIdAsync(int _id)
+        public async Task<UserServiceDto> GetByIdAsync(int id)
         {
-            var result = await _userTableRepository.GetAsync(_id);
+            var userDto = await _userTableRepository.GetByIdAsync(id);
 
-            if (result != null) { return result; }
-            else { throw new Exception("Name Not Found"); }
+            if (userDto is null)
+            {
+                return null;
+            }
+
+            return new UserServiceDto
+            {
+                UserId = userDto.UserId,
+                UserName = userDto.UserName,
+                UserSex = userDto.UserSex,
+                UserBirthDay= userDto.UserBirthDay,
+                UserMobilePhone= userDto.UserMobilePhone,
+            };
         }
 
-        public async Task CreateAsync(UserModel _userModel)
+        public async Task CreateAsync(UserServiceDto userServiceDto)
         {
-            await _userTableRepository.CreateAsync(_userModel);
+            //宣告定義且將Services UserServiceDto轉換為Repository UserModel
+            var config = new MapperConfiguration(cfg => { cfg.CreateMap<UserServiceDto?, UserModel>(); });
+
+            //建立一個mapper實例
+            var mapper = new Mapper(config);
+
+            //在CreateAsync方法中，將Services UserServiceDto轉換為Repository UserModel
+            var userModel = mapper.Map<UserServiceDto?, UserModel>(userServiceDto);
+
+            await _userTableRepository.CreateAsync(userModel);
         }
 
-        public async Task UpdateAsync(UserModel _userModl)
+        public async Task UpdateAsync(UserServiceDto userServiceDto)
         {
-            var getID = await _userTableRepository.GetAsync(_userModl.UserId);
+            //宣告定義且將Services UserServiceDto轉換為Repository UserModel
+            var config = new MapperConfiguration(cfg => { cfg.CreateMap<UserServiceDto, UserModel>(); });
 
-            if (getID == null) { throw new Exception("Data Not Found"); }
+            //建立一個mapper實例
+            var mapper = new Mapper(config);
+
+            //在UpdateAsync方法中，將Services UserServiceDto轉換為Services UserServiceDto
+            var userModel = mapper.Map<UserServiceDto, UserModel>(userServiceDto);
+
+            //UserServiceDto中找尋userId
+            var userId = await _userTableRepository.GetByIdAsync(userServiceDto.UserId);
+
+            //如果userId為空報錯，否則更新資料
+            if (userId == null)
+            {
+                throw new Exception("Id data not found");
+            }
             else
             {
-                getID.UserName = _userModl.UserName;
-                getID.UserSex = _userModl.UserSex;
-                getID.UserBirthDay = _userModl.UserBirthDay;
-                getID.UserMobilePhone = _userModl.UserMobilePhone;
-
-                await _userTableRepository.UpdateAsync(getID);
+                await _userTableRepository.UpdateAsync(userModel);
             }
         }
 
-        public async Task DeleteAsync(int _id)
+        public async Task<UserServiceDto?> DeleteAsync(int id)
         {
-            var getID = await _userTableRepository.GetAsync(_id);
+            var userId = await _userTableRepository.GetByIdAsync(id);
 
-            if (getID == null) { throw new Exception("Data Not Found"); }
-            else { await _userTableRepository.DeleteAsync(_id); }
+            if (userId == null) { throw new Exception("Id data not found"); }
+            else { await _userTableRepository.DeleteAsync(id); }
+
+            return null;
         }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace ProjectUser.Services.Dto
 {
-    public class UserServiceDto
+    public class UserDto
     {
         public int UserId { get; set; }
         public string? UserName { get; set; }
-        public Gender? UserSex { get; set; }
+        public Gender? Gender { get; set; }
         public DateTime? UserBirthDay { get; set; }
         public string? UserMobilePhone { get; set; }
     }

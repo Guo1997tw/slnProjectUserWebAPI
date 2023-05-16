@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="coreprofiler" Version="1.1.4" />
     <PackageReference Include="CoreProfiler.Web" Version="1.1.4" />
     <PackageReference Include="Evertrust.Core.Logging.Abstractions" Version="1.2.0" />
@@ -42,10 +43,6 @@
     <Content Update="coreprofiler.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
   </ItemGroup>
 
 </Project>

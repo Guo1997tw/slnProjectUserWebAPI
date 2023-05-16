@@ -1,10 +1,13 @@
-﻿using Evertrust.Core.Logging.Abstractions;
+﻿using AutoMapper;
+using Evertrust.Core.Logging.Abstractions;
 using Evertrust.Core.Logging.Exceptionless;
 using Evertrust.ResponseWrapper.Extensions;
 using Evertrust.ResponseWrapper.Middlewares;
 using Exceptionless;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using ProjectUser.Services.Mapping;
+using ProjectUser.WebAPI.Infrastructure.Mapping;
 
 namespace ProjectUser.WebAPI
 {
@@ -20,6 +23,15 @@ namespace ProjectUser.WebAPI
             {
                 options.AddEvertrustResponseWrapperFilters();
             });
+
+            services.AddAutoMapper
+            (
+                x =>
+                {
+                    x.AddProfile<ServiceProfile>();
+                    x.AddProfile<WebApplicationProfile>();
+                }
+             );
 
             /*services.AddApiVersioning(options =>
             {

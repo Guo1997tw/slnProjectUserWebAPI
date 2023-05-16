@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using ProjectUser.Services.Dto;
 using ProjectUser.Services.Interface;
 using ProjectUser.WebAPI.Filter;
 using ProjectUser.WebAPI.FluentValidation;
 using ProjectUser.WebAPI.Models;
-using ProjectUser.Services.Dto;
 
 namespace ProjectUser.WebAPI.Controllers
 {
@@ -13,9 +14,12 @@ namespace ProjectUser.WebAPI.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userServices)
+        private IMapper _mapper;
+
+        public UserController(IUserService userService, IMapper mapper)
         {
-            _userService = userServices;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,70 +27,103 @@ namespace ProjectUser.WebAPI.Controllers
         {
             var result = await _userService.GetUsersAsync();
 
-            return Ok(result);
+            var response = new
+            {
+                Data = result,
+                Output = new ResultOutputModel
+                {
+                    Success = true,
+                    Message = string.Empty
+                }
+            };
+
+            return Ok(response);
         }
 
         [HttpGet]
+        [RequestExceptionFilter]
         public async Task<IActionResult> GetId(int id)
         {
             var result = await _userService.GetByIdAsync(id);
 
-            return Ok(result);
+            var response = new
+            {
+                Data = result,
+                Output = new ResultOutputModel
+                {
+                    Success = true,
+                    Message = string.Empty
+                }
+            };
+
+            return Ok(response);
         }
 
         [HttpPost]
-        [UserValidator(typeof(CreateUseParameterValidator))]
+        [RequestValidator(typeof(CreateUseParameterValidator))]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserParameter createUserParameter)
         {
-            UserServiceDto userServiceDto = new UserServiceDto()
+            UserDto userDto = new()
             {
                 UserName = createUserParameter.UserName,
-                UserSex = createUserParameter.UserSex,
+                Gender = createUserParameter.UserSex,
                 UserBirthDay = createUserParameter.UserBirthDay,
                 UserMobilePhone = createUserParameter.UserMobilePhone
             };
-            await _userService.CreateAsync(userServiceDto);
 
-            return Ok(new ResultOutputModel
+            await _userService.CreateAsync(userDto);
+            
+            var result = userDto;
+            
+            var response = new
             {
-                Success = true,
-                Message = string.Empty
-            });
+                Data = result,
+                Output = new ResultOutputModel
+                {
+                    Success = true,
+                    Message = string.Empty
+                }
+            };
 
-            /*if(userServiceDto.UserName.Contains(' ').Equals(true))
-            {
-                throw new Exception ("Name Error");
-            }*/
+            return Ok(response);
         }
 
-        [HttpPatch()]
-        [UserValidatorAttribute(typeof(UpdateUseParameterValidator))]
+        [HttpPatch]
+        [RequestValidator(typeof(UpdateUseParameterValidator))]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserParameter updateUserParameter)
         {
-            UserServiceDto userServiceDto = new UserServiceDto()
+            UserDto userDto = new()
             {
                 UserId = updateUserParameter.UserId,
                 UserName = updateUserParameter.UserName,
-                UserSex = updateUserParameter.UserSex,
+                Gender = updateUserParameter.UserSex,
                 UserBirthDay = updateUserParameter.UserBirthDay,
                 UserMobilePhone = updateUserParameter.UserMobilePhone
             };
 
-            await _userService.UpdateAsync(userServiceDto);
+            await _userService.UpdateAsync(userDto);
 
-            return Ok(new ResultOutputModel
+            var result = userDto;
+
+            var response = new
             {
-                Success = true,
-                Message = string.Empty
-            });
+                Data = result,
+                Output = new ResultOutputModel
+                {
+                    Success = true,
+                    Message = string.Empty
+                }
+            };
+
+            return Ok(response);
         }
 
-        [HttpDelete()]
+        [HttpDelete]
         public async Task<IActionResult> DeleteUser([FromBody] int id)
         {
             await _userService.DeleteAsync(id);
 
-                        return Ok(new ResultOutputModel
+            return Ok(new ResultOutputModel
             {
                 Success = true,
                 Message = string.Empty

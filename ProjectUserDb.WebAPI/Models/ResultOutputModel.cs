@@ -1,4 +1,6 @@
-﻿namespace ProjectUser.WebAPI.Models
+﻿using ProjectUser.Common.Enums;
+
+namespace ProjectUser.WebAPI.Models
 {
     public class ResultOutputModel
     {

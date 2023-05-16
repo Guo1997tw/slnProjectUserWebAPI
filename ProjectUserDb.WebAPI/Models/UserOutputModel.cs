@@ -4,6 +4,7 @@ namespace ProjectUser.WebAPI.Models
 {
     public class UserOutputModel
     {
+        public int UserId { get; set; }
         public string? UserName { get; set; }
         public Gender UserSex { get; set; }
         public DateTime? UserBirthDay { get; set; }

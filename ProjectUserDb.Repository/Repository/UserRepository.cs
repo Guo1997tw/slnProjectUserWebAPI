@@ -9,9 +9,17 @@ namespace ProjectUser.Repository.Repository
     public class UserRepository : IUserRepository
     {
         private readonly IDatabaseHelper _databaseHelper;
+
         public UserRepository(IDatabaseHelper databaseHelper)
         {
             _databaseHelper = databaseHelper;
+        }
+
+        public async Task<bool> ExistAsync(int id)
+        {
+            var result = await GetByIdAsync(id);
+
+            if (result == null) { return false; } else { return true; }
         }
 
         public async Task<List<UserModel>> GetListAsync()
@@ -33,7 +41,7 @@ namespace ProjectUser.Repository.Repository
                               FROM [dbo].[UserTable]
                               WHERE UserId = @UserId";
             
-            var result = await ucs.QueryFirstOrDefaultAsync<UserModel>(searchSQL, new { UserId = id, DbType.Int64});
+            var result = await ucs.QueryFirstOrDefaultAsync<UserModel>(searchSQL, new { UserId = id });
 
             return result;
         }

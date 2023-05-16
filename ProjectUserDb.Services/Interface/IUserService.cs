@@ -4,14 +4,14 @@ namespace ProjectUser.Services.Interface
 {
     public interface IUserService
     {
-        Task<List<UserServiceDto>> GetUsersAsync();
+        Task<List<UserDto>> GetUsersAsync();
 
-        Task<UserServiceDto> GetByIdAsync(int id);
+        Task<UserDto> GetByIdAsync(int id);
 
-        Task CreateAsync(UserServiceDto userServiceDto);
+        Task CreateAsync(UserDto userServiceDto);
 
-        Task UpdateAsync(UserServiceDto userServiceDto);
+        Task UpdateAsync(UserDto userServiceDto);
 
-        Task<UserServiceDto?> DeleteAsync(int id);
+        Task DeleteAsync(int id);
     }
 }

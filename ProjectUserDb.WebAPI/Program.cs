@@ -3,10 +3,11 @@ using ProjectUser.Repository.Helpers;
 using ProjectUser.Repository.Interface;
 using ProjectUser.Repository.Repository;
 using ProjectUser.Services.Interface;
+using ProjectUser.Services.Mapping;
 using ProjectUser.Services.Services;
+using ProjectUser.WebAPI.Filter;
+using ProjectUser.WebAPI.Infrastructure.Mapping;
 using Swashbuckle.AspNetCore.Filters;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +15,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IDatabaseHelper, DatabaseHelper>();
 //builder.Services.AddScoped<IDatabaseHelper>(Option => new DatabaseHelper("UserDbContext"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserServices>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper( x =>
+{
+    x.AddProfile<ServiceProfile>();
+    x.AddProfile<WebApplicationProfile>();
+});
+
+builder.Services.AddControllers(options =>
+{
+    // 在這裡設定全域過濾器
+    options.Filters.Add(typeof(RequestExceptionFilter));
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

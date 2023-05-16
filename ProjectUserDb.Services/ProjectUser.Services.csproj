@@ -15,8 +15,4 @@
     <ProjectReference Include="..\ProjectUserDb.Repository\ProjectUser.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
-
 </Project>

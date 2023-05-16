@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ProjectUser.WebAPI.Filter
 {
-    public class UserValidatorAttribute : ActionFilterAttribute
+    public class RequestValidatorAttribute : ActionFilterAttribute
     {
         private readonly Type _validatorType;
 
-        public UserValidatorAttribute(Type validatorType)
+        public RequestValidatorAttribute(Type validatorType)
         {
             this._validatorType = validatorType;
         }

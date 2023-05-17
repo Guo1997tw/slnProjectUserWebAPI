@@ -14,7 +14,7 @@ namespace ProjectUser.WebAPI.Controllers
     {
         private readonly IUserService _userService;
 
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public UserController(IUserService userService, IMapper mapper)
         {
@@ -42,6 +42,7 @@ namespace ProjectUser.WebAPI.Controllers
 
         [HttpGet]
         [RequestExceptionFilter]
+        [ExceptionFilter]
         public async Task<IActionResult> GetId(int id)
         {
             var result = await _userService.GetByIdAsync(id);
@@ -61,6 +62,8 @@ namespace ProjectUser.WebAPI.Controllers
 
         [HttpPost]
         [RequestValidator(typeof(CreateUseParameterValidator))]
+        [RequestExceptionFilter]
+        [ExceptionFilter]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserParameter createUserParameter)
         {
             UserDto userDto = new()
@@ -90,6 +93,8 @@ namespace ProjectUser.WebAPI.Controllers
 
         [HttpPatch]
         [RequestValidator(typeof(UpdateUseParameterValidator))]
+        [RequestExceptionFilter]
+        [ExceptionFilter]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserParameter updateUserParameter)
         {
             UserDto userDto = new()
@@ -119,6 +124,8 @@ namespace ProjectUser.WebAPI.Controllers
         }
 
         [HttpDelete]
+        [RequestExceptionFilter]
+        [ExceptionFilter]
         public async Task<IActionResult> DeleteUser([FromBody] int id)
         {
             await _userService.DeleteAsync(id);

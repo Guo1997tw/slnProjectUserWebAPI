@@ -1,10 +1,10 @@
 using CoreProfiler.Web;
-using Evertrust.Core.Logging.Abstractions;
-using Evertrust.Core.Logging.Exceptionless;
+using Evertrust.Core.Logging.Exceptionless.DependencyInjection;
 using Evertrust.ResponseWrapper.Extensions;
 using Evertrust.ResponseWrapper.Middlewares;
 using Exceptionless;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using ProjectUser.Repository.Helpers;
 using ProjectUser.Repository.Interface;
 using ProjectUser.Repository.Repository;
@@ -12,6 +12,7 @@ using ProjectUser.Services.Interface;
 using ProjectUser.Services.Mapping;
 using ProjectUser.Services.Services;
 using ProjectUser.WebAPI;
+using ProjectUser.WebAPI.Filter;
 using ProjectUser.WebAPI.Infrastructure.Mapping;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -28,6 +29,7 @@ builder.Services.AddEvertrustResponseWrapper();
 builder.Services.AddControllers(x =>
 {
     x.AddEvertrustResponseWrapperFilters();
+    x.Filters.Add(typeof(ExceptionFilter));
 });
 
 builder.Services.AddApiVersioning(x =>
@@ -37,7 +39,14 @@ builder.Services.AddApiVersioning(x =>
     x.DefaultApiVersion = new ApiVersion(1, 0);
 });
 
-builder.Services.AddSingleton<ILogHelperFactory, LogHelperFactory>();
+builder.Services.AddExceptionless(config =>
+{
+    config.ApiKey = builder.Configuration.GetSection("Exceptionless")["ApiKey"];
+    config.ServerUrl = builder.Configuration.GetSection("Exceptionless")["ServerUrl"];
+    config.SetDefaultMinLogLevel(Exceptionless.Logging.LogLevel.Trace);
+});
+
+builder.Services.AddLogHelperFactory();
 
 //AutoMapper
 builder.Services.AddAutoMapper( x =>
@@ -86,6 +95,15 @@ if (app.Environment.IsDevelopment())
         );
     });
 }
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseStaticFiles();
+app.UseCookiePolicy();
 
 //CoreProfiler
 app.UseCoreProfiler(true);
@@ -97,7 +115,7 @@ app.UseRouting();
 //Add Evertrust ResponseWrapper
 app.UseEvertrustResponseWrapper(typeof(Startup).Assembly);
 
-app.UseEvertrustExceptionHandling();
+app.UseExceptionless();
 
 app.UseAuthorization();
 

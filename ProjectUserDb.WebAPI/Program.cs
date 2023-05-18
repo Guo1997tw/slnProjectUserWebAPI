@@ -16,6 +16,7 @@ using ProjectUser.WebAPI.Filter;
 using ProjectUser.WebAPI.Infrastructure.Mapping;
 using Swashbuckle.AspNetCore.Filters;
 using Hangfire;
+using Hangfire.Dashboard;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -126,7 +127,15 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
-app.UseHangfireDashboard();
+app.UseHangfireDashboard
+(
+    /*"/hangfire",
+    new DashboardOptions
+    {
+        Authorization = new List<IDashboardAuthorizationFilter>(),
+        IgnoreAntiforgeryToken = true
+    }*/
+);
 
 app.MapControllers();
 

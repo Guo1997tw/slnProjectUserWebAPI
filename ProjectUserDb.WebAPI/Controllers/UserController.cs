@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using ProjectUser.Services.Dto;
 using ProjectUser.Services.Interface;
@@ -23,8 +24,16 @@ namespace ProjectUser.WebAPI.Controllers
         }
 
         [HttpGet]
+        //[Obsolete]
         public async Task<IActionResult> GetList()
         {
+            //單次立即執行
+            BackgroundJob.Enqueue(() => Console.WriteLine("單次!"));
+            //單次10秒後執行
+            BackgroundJob.Schedule(() => Console.WriteLine("10秒後執行!"), TimeSpan.FromSeconds(10));
+            //重複執行，預設為每天00:00啟動
+            RecurringJob.AddOrUpdate(() => Console.WriteLine("重複執行！"), Cron.Daily);
+
             var result = await _userService.GetUsersAsync();
 
             var response = new

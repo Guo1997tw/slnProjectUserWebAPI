@@ -15,6 +15,7 @@ using ProjectUser.WebAPI;
 using ProjectUser.WebAPI.Filter;
 using ProjectUser.WebAPI.Infrastructure.Mapping;
 using Swashbuckle.AspNetCore.Filters;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,10 @@ builder.Services.AddExceptionless(config =>
 });
 
 builder.Services.AddLogHelperFactory();
+
+builder.Services.AddHangfire(config => {
+    config.UseInMemoryStorage();
+});
 
 //AutoMapper
 builder.Services.AddAutoMapper( x =>
@@ -120,6 +125,8 @@ app.UseExceptionless();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+app.UseHangfireDashboard();
 
 app.MapControllers();
 

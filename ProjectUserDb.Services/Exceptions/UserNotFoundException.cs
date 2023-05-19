@@ -2,8 +2,7 @@
 {
     public class UserNotFoundException : Exception
     {
-
-        public int UserId { get;}
+        public int UserId { get; }
 
         public UserNotFoundException(int userId)
         {

@@ -47,14 +47,12 @@ namespace ProjectUser.WebAPI.Controllers
         {
             return await _userTableServices.GetByIdAsync(_id);
         }*/
-        
+
         /*[HttpPost("CreateUser")]
         [RequestValidator(typeof(CreateUseParameterValidator))]
         public async Task<IActionResult> CreateUser([FromBody] UserModel _userModl)
         {
-          
              await _userTableServices.CreateAsync(_userModl);
-
 
             return Ok();
 
@@ -62,7 +60,7 @@ namespace ProjectUser.WebAPI.Controllers
         }*/
 
         /*[HttpPut("UpdateUser")]
- 
+
         public async Task UpdateUser([FromBody] UserModel _userModl)
         {
             await _userTableServices.UpdateAsync(_userModl);

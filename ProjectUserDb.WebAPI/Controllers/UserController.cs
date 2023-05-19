@@ -24,7 +24,6 @@ namespace ProjectUser.WebAPI.Controllers
         }
 
         [HttpGet]
-        //[Obsolete]
         public async Task<IActionResult> GetList()
         {
             //單次立即執行
@@ -86,9 +85,9 @@ namespace ProjectUser.WebAPI.Controllers
             };
 
             await _userService.CreateAsync(userDto);
-            
+
             var result = userDto;
-            
+
             var response = new
             {
                 Data = result,

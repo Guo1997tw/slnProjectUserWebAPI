@@ -56,8 +56,8 @@ namespace ProjectUser.Services.Services
                 UserId = user.UserId,
                 UserName = user.UserName,
                 Gender = user.UserSex,
-                UserBirthDay= user.UserBirthDay,
-                UserMobilePhone= user.UserMobilePhone,
+                UserBirthDay = user.UserBirthDay,
+                UserMobilePhone = user.UserMobilePhone,
             };
         }
 

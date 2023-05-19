@@ -11,7 +11,7 @@ namespace ProjectUser.WebAPI.Filter
             var action = context.RouteData.Values["action"]?.ToString();
             var controller = context.RouteData.Values["controller"]?.ToString();
             var logHelper = logHelperFactory.Create($"{controller}/{action}");
-            
+
             logHelper.WriteException(LogLevel.Error, context.Exception);
         }
     }

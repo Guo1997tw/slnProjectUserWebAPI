@@ -27,7 +27,7 @@ namespace ProjectUser.Repository.Repository
             var ucs = _databaseHelper.GetConnection();
 
             var selectSQL = @"SELECT UserId, UserName, UserSex, UserBirthDay, UserMobilePhone FROM [dbo].[UserTable]";
-                
+
             var result = await ucs.QueryAsync<UserModel>(selectSQL);
 
             return result.ToList();
@@ -40,7 +40,7 @@ namespace ProjectUser.Repository.Repository
             var searchSQL = @"SELECT UserId, UserName, UserSex, UserBirthDay, UserMobilePhone
                               FROM [dbo].[UserTable]
                               WHERE UserId = @UserId";
-            
+
             var result = await ucs.QueryFirstOrDefaultAsync<UserModel>(searchSQL, new { UserId = id });
 
             return result;

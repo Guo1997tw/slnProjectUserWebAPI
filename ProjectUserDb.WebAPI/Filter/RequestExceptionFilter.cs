@@ -53,7 +53,7 @@ namespace ProjectUser.WebAPI.Filter
                             }
                         }
                     };
-                    
+
                     context.Result = new NotFoundObjectResult(failureResultOutputModel);
                 }
             });

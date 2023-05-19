@@ -50,12 +50,13 @@ builder.Services.AddExceptionless(config =>
 
 builder.Services.AddLogHelperFactory();
 
-builder.Services.AddHangfire(config => {
+builder.Services.AddHangfire(config =>
+{
     config.UseInMemoryStorage();
 });
 
 //AutoMapper
-builder.Services.AddAutoMapper( x =>
+builder.Services.AddAutoMapper(x =>
 {
     x.AddProfile<ServiceProfile>();
     x.AddProfile<WebApplicationProfile>();
@@ -129,12 +130,12 @@ app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 app.UseHangfireDashboard
 (
-    /*"/hangfire",
-    new DashboardOptions
-    {
-        Authorization = new List<IDashboardAuthorizationFilter>(),
-        IgnoreAntiforgeryToken = true
-    }*/
+/*"/hangfire",
+new DashboardOptions
+{
+    Authorization = new List<IDashboardAuthorizationFilter>(),
+    IgnoreAntiforgeryToken = true
+}*/
 );
 
 app.MapControllers();
